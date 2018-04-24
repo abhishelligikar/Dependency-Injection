@@ -11,7 +11,7 @@ namespace UnityContainerDIApp.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository employeeRepository;
-        
+
         public EmployeeController(IEmployeeRepository repository)
         {
             this.employeeRepository = repository;
@@ -22,14 +22,14 @@ namespace UnityContainerDIApp.Controllers
         {
             try
             {
-                return View();
+                var objEmployeelist = employeeRepository.GetEmployees();
+                return View(objEmployeelist);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw e;
             }
-            
+
         }
 
         // GET: Employee/Details/5
@@ -40,12 +40,11 @@ namespace UnityContainerDIApp.Controllers
                 var objList = employeeRepository.GetEmployees();
                 return View(objList);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw e;
             }
-            
+
         }
 
         // GET: Employee/Create
@@ -56,17 +55,29 @@ namespace UnityContainerDIApp.Controllers
 
         // POST: Employee/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult AddEmployee(Employee objEmployee)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                if (objEmployee == null)
+                {
+                    throw new ArgumentException("Item is null");
+                }
+                var boolresult = employeeRepository.AddEmployee(objEmployee);
+                if (boolresult)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Employee Cannot be added");
+                    return View();
+                }
+                
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                throw e;
             }
         }
 
@@ -89,7 +100,7 @@ namespace UnityContainerDIApp.Controllers
                 var objEditedEmployee = employeeRepository.UpdateEmployee(objEmployee);
                 if (objEditedEmployee)
                 {
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -101,11 +112,6 @@ namespace UnityContainerDIApp.Controllers
             {
                 throw e;
             }
-           
-
-
-            
-           
         }
 
         // GET: Employee/Delete/5
@@ -116,17 +122,28 @@ namespace UnityContainerDIApp.Controllers
 
         // POST: Employee/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(Employee objEmployee)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                if (objEmployee == null)
+                {
+                    throw new ArgumentNullException("Employee object is null");
+                }
+                var objEditedEmployee = employeeRepository.DeleteEmployee(objEmployee);
+                if (objEditedEmployee)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Employee object not edited");
+                    return View();
+                }
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                throw e;
             }
         }
     }

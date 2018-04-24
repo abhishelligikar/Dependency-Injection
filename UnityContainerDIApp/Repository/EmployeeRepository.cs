@@ -27,50 +27,20 @@ namespace UnityContainerDIApp.Repository
 
         public bool AddEmployee(Employee objEmployee)
         {
-            try
-            {
-                if (objEmployee == null)
-                {
-                    throw new ArgumentException("Item is null");
-                }
-                objEmployee.Id = id++;
-                objListEmployees.Add(objEmployee);
-                return true;
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            objEmployee.Id = id++;
+            objListEmployees.Add(objEmployee);
+            return true;
         }
 
         public bool DeleteEmployee(Employee objEmployee)
         {
-            try
-            {
-                objListEmployees.RemoveAll(p => p.Id == objEmployee.Id);
-                return true;
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            objListEmployees.RemoveAll(p => p.Id == objEmployee.Id);
+            return true;
         }
 
         public Employee GetEmployee(int id)
         {
-            try
-            {
-                return objListEmployees.FirstOrDefault(obj => obj.Id == id);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return objListEmployees.FirstOrDefault(obj => obj.Id == id);
         }
 
         public IEnumerable<Employee> GetEmployees()
@@ -80,28 +50,14 @@ namespace UnityContainerDIApp.Repository
 
         public bool UpdateEmployee(Employee objEmployee)
         {
-            try
+            int index = objListEmployees.FindIndex(p => p.Id == objEmployee.Id);
+            if (index == -1)
             {
-                if (objEmployee == null)
-                {
-                    throw new ArgumentNullException("Employee object is null");
-                }
-
-
-                int index = objListEmployees.FindIndex(p => p.Id == objEmployee.Id);
-                if (index == -1)
-                {
-                    return false;
-                }
-                objListEmployees.RemoveAt(index);
-                objListEmployees.Add(objEmployee);
-                return true;
+                return false;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            objListEmployees.RemoveAt(index);
+            objListEmployees.Add(objEmployee);
+            return true;
         }
     }
 }
