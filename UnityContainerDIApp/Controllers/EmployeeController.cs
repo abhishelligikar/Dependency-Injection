@@ -37,7 +37,7 @@ namespace UnityContainerDIApp.Controllers
         {
             try
             {
-                var objList = employeeRepository.GetEmployees();
+                var objList = employeeRepository.GetEmployee(id);
                 return View(objList);
             }
             catch (Exception e)
@@ -84,7 +84,15 @@ namespace UnityContainerDIApp.Controllers
         // GET: Employee/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                var objEmployee = employeeRepository.GetEmployee(id);
+                return View(objEmployee);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // POST: Employee/Edit/5
@@ -117,7 +125,15 @@ namespace UnityContainerDIApp.Controllers
         // GET: Employee/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                var objEmployee = employeeRepository.GetEmployee(id);
+                return View(objEmployee);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // POST: Employee/Delete/5
